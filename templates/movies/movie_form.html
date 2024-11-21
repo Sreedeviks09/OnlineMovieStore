@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  
+<h2 class="text-center">{% if form.instance.pk %}
+    Edit Movie
+    {% else %}
+    Add Movie
+    {% endif %}
+</h2>
+    <a class="btn btn-secondary ms-auto" href="{% url 'movie_list' %}">Back to List</a>
+</div>
+
+<div class="container">
+    
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="mb-3">
+                        <label for="id_title" class="form-label">Title</label>
+                        <input type="text" 
+                            name="title" 
+                            id="id_title" 
+                            class="form-control" 
+                            value="{{ movie.title|default:'' }}" 
+                            required>
+                    </div>
+                </div>
+
+                <div class="col-md-2 mb-2">
+                    <div class="mb-3">
+                        <label for="id_rating" class="form-label">Rating</label>
+                        <input type="number" 
+                            step="0.1" 
+                            name="rating"
+                            id="id_rating" 
+                            class="form-control"
+                            value="{{ movie.rating|default:'' }}" 
+                            required>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="mb-3">
+                        <label for="id_release_date" class="form-label">Release Date</label>
+                        <input type="date"
+                            name="release_date" 
+                            id="id_release_date" 
+                            class="form-control" 
+                            value="{{ movie.release_date|date:'Y-m-d' }}"
+                            required>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="mb-3">
+                        <label for="id_image" class="form-label">Image</label>
+                        <input type="file"
+                            name="image" 
+                            id="id_image" 
+                            class="form-control">
+                                {% if movie.image %}
+                                    <img src="{{ movie.image.url }}" 
+                                        alt="{{ movie.title }}" 
+                                        class="mt-2" 
+                                        style="width: 150px; height: auto;">
+                                {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-12">
+                    <div class="mb-3">
+                        <label for="id_desc" class="form-label">Description</label>
+                        <textarea name="desc" 
+                                id="id_desc"
+                                class="form-control" 
+                                required>
+                                {{ movie.desc|default:'' }}
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+           
+            {% if form.instance.pk %}
+            <button class="btn btn-success ms-auto" type="submit">Update</button>
+            {% else %}
+            <button class="btn btn-success ms-auto" type="submit">Save</button>
+            {% endif %}
+        </form>
+</div>
+
+{% endblock  %}
